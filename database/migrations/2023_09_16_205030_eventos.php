@@ -14,11 +14,11 @@ class Eventos extends Migration
     public function up()
     {
         Schema::create('eventos', function (Blueprint $table) {
-            $table->string('titulo');
-            $table->string('descricao');
+            $table->string('title');
+            $table->string('description');
             $table->boolean('status');
-            $table->timestamp('data_inicio');
-            $table->timestamp('data_prazo');
+            $table->timestamp('start');
+            $table->timestamp('end');
             $table->timestamp('data_conclusao')->nullable();
             $table->string('usr_responsavel');
 

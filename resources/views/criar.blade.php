@@ -9,14 +9,14 @@
         <h1>Adicionar Evento</h1>
         <form action="/criar-evento" method="POST">
             @csrf
-            <label for="titulo">Título</label>
-            <input type="text" name="titulo" required>
-            <label for="descricao">Descrição</label>
-            <textarea name="descricao" required></textarea>
-            <label for="data_inicio">Data de Início</label>
-            <input type="date" name="data_inicio" required>
-            <label for="data_prazo">Data de Encerramento</label>
-            <input type="date" name="data_prazo" required>
+            <label for="title">Título</label>
+            <input type="text" name="title" required>
+            <label for="description">Descrição</label>
+            <textarea name="description" required></textarea>
+            <label for="start">Data de Início</label>
+            <input type="date" name="start" required>
+            <label for="end">Data de Encerramento</label>
+            <input type="date" name="end" required>
             <button type="submit">Adicionar</button>
         </form>
     </div>
