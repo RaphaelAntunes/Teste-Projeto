@@ -25,11 +25,11 @@ class EventoController extends Controller
         *            mediaType="multipart/form-data",
         *            @OA\Schema(
         *               type="object",
-        *               required={"title", "description", "status", "data_inicio", "data_prazo"},
+        *               required={"title", "description", "status", "start", "end"},
         *               @OA\Property(property="title", type="string"),
         *               @OA\Property(property="description", type="string"),
-        *               @OA\Property(property="data_inicio", type="timestamp"),
-        *               @OA\Property(property="data_prazo", type="timestamp")
+        *               @OA\Property(property="start", type="timestamp"),
+        *               @OA\Property(property="end", type="timestamp")
         *            ),
         *        ),
         *    ),
@@ -45,11 +45,11 @@ class EventoController extends Controller
     public function criarEvento(Request $request)
 {
     $usuarioEmail = Auth::user()->email;
-    $dataInicio = $request->input('data_inicio'); // Data de início do novo evento
+    $dataInicio = $request->input('start'); // Data de início do novo evento
 
     // Verifique se já existe um evento com a mesma data de início para o mesmo usuário
     $eventoExistente = EventoModel::where('usr_responsavel', $usuarioEmail)
-        ->where('data_inicio', $dataInicio)
+        ->where('start', $dataInicio)
         ->first();
 
     if ($eventoExistente) {
@@ -68,7 +68,11 @@ class EventoController extends Controller
     // A data de início é única e não é um final de semana, você pode criar o novo evento
     $evento = EventoModel::create([
         'title' => $request->input('title'),
+<<<<<<< HEAD
         'description' => $request->input('description'),
+=======
+        'descricao' => $request->input('descricao'),
+>>>>>>> a17dd84b8d77c6130f6396d61019250f6191fb34
         'start' => $request->input('start'),
         'end' => $request->input('end'),
         'usr_responsavel' => $usuarioEmail,
@@ -217,8 +221,8 @@ class EventoController extends Controller
         *               type="object",
         *               @OA\Property(property="title", type="string"),
         *               @OA\Property(property="description", type="string"),
-        *               @OA\Property(property="data_inicio", type="timestamp"),
-        *               @OA\Property(property="data_prazo", type="timestamp"),
+        *               @OA\Property(property="start", type="timestamp"),
+        *               @OA\Property(property="end", type="timestamp"),
         *               @OA\Property(property="status", type="boolean")
         *            ),
         *        ),
@@ -246,7 +250,11 @@ class EventoController extends Controller
         // Atualize os campos do evento com base nos dados fornecidos no request
         $evento->update([
             'title' => $request->input('title'),
+<<<<<<< HEAD
             'description' => $request->input('description'),
+=======
+            'descricao' => $request->input('descricao'),
+>>>>>>> a17dd84b8d77c6130f6396d61019250f6191fb34
             'start' => $request->input('start'),
             'end' => $request->input('end'),
             'status' => $request->input('status'),

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnIdEvent extends Migration
+class ChangeColumnsEventos extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class AddColumnIdEvent extends Migration
         Schema::table('eventos', function (Blueprint $table) {
             $table->timestamp('start');
             $table->timestamp('end');
-            $table->timestamp('title');
+            $table->string('title');
         });
     }
 

@@ -324,13 +324,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         @csrf <!-- Adicione o token CSRF para proteção contra ataques CSRF -->
 
                         <div class="modal-header">
-                            <h4 class="modal-title">Editar Evento `+eventos.titulo+`</h4>
+                            <h4 class="modal-title">Editar Evento `+eventos.title+`</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
                                 <label>Título</label>
-                                <input type="text" name="titulo" value='`+eventos.titulo+`' class="form-control" required>
+                                <input type="text" name="title" value='`+eventos.title+`' class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Descrição</label>
@@ -374,7 +374,7 @@ $('#editEventoForm').submit(function(e) {
             e.preventDefault(); // Impede o envio padrão do formulário
 
             var formData = $(this).serialize(); // Serialize os dados do formulário
-            var url = 'editar-evento/' + encodeURIComponent(titulo);
+            var url = 'editar-evento/' + encodeURIComponent(title);
 
             $.ajax({
                 type: 'put',
@@ -437,10 +437,10 @@ $('#editEventoForm').submit(function(e) {
         $('.delete').click(function(e) {
             e.preventDefault(); // Impede o comportamento padrão do link
 
-            var titulo = $(this).data('titulo'); // Obtém o título do atributo de dados
+            var title = $(this).data('title'); // Obtém o título do atributo de dados
 
-            if (confirm('Tem certeza que deseja excluir o evento "' + titulo + '"?')) {
-                var url = '/excluir-evento/' + titulo; // Substitua pelo URL correto da sua rota de exclusão de evento
+            if (confirm('Tem certeza que deseja excluir o evento "' + title + '"?')) {
+                var url = '/excluir-evento/' + title; // Substitua pelo URL correto da sua rota de exclusão de evento
 
                 $.ajax({
                     type: 'DELETE', // Use o método DELETE para solicitar exclusão
