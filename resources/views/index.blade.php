@@ -55,6 +55,12 @@ document.addEventListener('DOMContentLoaded', function() {
             var startDate = new Date(document.getElementById('swalEvtStartDate').value);
             var endDate = new Date(document.getElementById('swalEvtEndDate').value);
 
+            // Formatar as datas no formato 'Y-m-d H:i:s'
+            var formattedStartDate = startDate.toISOString().slice(0, 19).replace("T", " ");
+            var formattedEndDate = endDate.toISOString().slice(0, 19).replace("T", " ");
+
+            console.log(formattedStartDate);
+
             if (!eventTitle) {
                 Swal.showValidationMessage('O título do evento é obrigatório.');
                 return false;
@@ -68,9 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
             var eventData = {
                 title: eventTitle,
                 description: eventDescription,
-                start: startDate,
-                end: endDate,
-                status: true
+                status: 'Aberto',
+                start: formattedStartDate,
+                end: formattedEndDate
             };
 
             // Sending AJAX request
