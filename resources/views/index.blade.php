@@ -39,8 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
             '<input type="datetime-local" id="swalEvtStartDate" class="swal2-input" style="width: 100%" value="' + info.dateStr.replace(/T.*$/, '') + 'T00:00">' +
             '<label for="swalEvtEndDate" class="custom-swal-title">Data Final:</label>' +
             '<input type="datetime-local" id="swalEvtEndDate" class="swal2-input" style="width: 100%" value="' + info.dateStr.replace(/T.*$/, '') + 'T23:59">' +
-            '<label for="checkbox" style="width: 100%">Dia Inteiro</label>' +
-            '<input type="checkbox" id="checkbox" class="swal2-checkbox">' +
             '</div>',
           showCancelButton: true,
           confirmButtonText: 'Adicionar',
@@ -56,27 +54,44 @@ document.addEventListener('DOMContentLoaded', function() {
             var eventDescription = document.getElementById('swalEvtDesc').value;
             var startDate = new Date(document.getElementById('swalEvtStartDate').value);
             var endDate = new Date(document.getElementById('swalEvtEndDate').value);
-            var allDay = document.getElementById('checkbox').checked;
 
             if (!eventTitle) {
-              Swal.showValidationMessage('O título do evento é obrigatório.');
-              return false;
+                Swal.showValidationMessage('O título do evento é obrigatório.');
+                return false;
             }
 
             if (startDate > endDate) {
-              Swal.showValidationMessage('A data final não pode ser anterior à data inicial.');
-              return false;
+                Swal.showValidationMessage('A data final não pode ser anterior à data inicial.');
+                return false;
             }
-            calendar.addEvent({
-              title: eventTitle,
-              description: eventDescription,
-              start: startDate,
-              end: endDate,
-              allDay: allDay
+
+            var eventData = {
+                title: eventTitle,
+                description: eventDescription,
+                start: startDate,
+                end: endDate
+            };
+
+            // Sending AJAX request
+            fetch('saveEvent.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(eventData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    calendar.addEvent(eventData);
+                    Swal.fire('Evento adicionado com sucesso!', '', 'success');
+                } else {
+                    Swal.fire('Erro ao adicionar evento', data.message, 'error');
+                }
             });
 
-            return true;
-          }
+            return false;
+        }
         }).then(function(result) {
           if (result.isConfirmed) {
             Swal.fire('Evento adicionado com sucesso!', '', 'success');
