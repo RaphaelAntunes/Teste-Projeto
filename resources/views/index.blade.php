@@ -105,6 +105,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="col-sm-6">
 						<h2>Agenda de <b>Eventos</b></h2>
 					</div>
+                    <div class="col-sm-6">
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-info">Login</a>
+                    @endauth
+                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
+                            <i class="material-icons">&#xE147;</i> <span>Criar novo evento</span>
+                        </a>
+                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">
+                            <i class="material-icons">&#xE15C;</i> <span>Remover</span>
+                        </a>
+                    </div>
 					<div class="col-sm-6">
                     @auth
                         <form method="POST" action="{{ route('logout') }}">
