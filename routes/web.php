@@ -15,15 +15,16 @@ use App\Http\Controllers\EventoController;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/criar-evento', [EventoController::class, 'criarEvento']);
     Route::delete('/excluir-evento/{id}', [EventoController::class, 'excluirEvento']);
     Route::put('/editar-evento/{nomeEvento}', [EventoController::class, 'editarEvento']);
+    Route::get('/', function () {
+        return view('index');
+    });
 });
+Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
