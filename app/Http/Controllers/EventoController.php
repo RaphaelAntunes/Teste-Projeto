@@ -46,6 +46,7 @@ class EventoController extends Controller
 {
     $usuarioEmail = Auth::user()->email;
     $dataInicio = $request->input('start'); // Data de início do novo evento
+    echo($usuarioEmail);
 
     // Verifique se já existe um evento com a mesma data de início para o mesmo usuário
     $eventoExistente = EventoModel::where('usr_responsavel', $usuarioEmail)
@@ -75,6 +76,7 @@ class EventoController extends Controller
 >>>>>>> a17dd84b8d77c6130f6396d61019250f6191fb34
         'start' => $request->input('start'),
         'end' => $request->input('end'),
+        'status' => $request->input('status'),
         'usr_responsavel' => $usuarioEmail,
     ]);
 
