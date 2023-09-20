@@ -13,7 +13,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-  <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
@@ -22,6 +22,18 @@ document.addEventListener('DOMContentLoaded', function() {
     initialView: 'dayGridMonth',
     height: 650,
     events: 'fetchEvents.php',
+    businessHours: {
+    daysOfWeek: [ 1, 2, 3, 4, 5 ],
+    selectable: false
+    },
+    events: {
+        url: '/path/to/events', // URL to your server-side endpoint
+        method: 'GET',
+        failure: function() {
+            alert('There was an error while fetching events!');
+        },
+        textColor: 'black' // Set text color for the events
+    },
 
     dateClick: function(info) {
         Swal.fire({
@@ -49,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
         preConfirm: function() {
           var eventTitle = document.getElementById('swalEvtTitle').value;
           var eventDescription = document.getElementById('swalEvtDesc').value;
-          var startDate = new Date(document.getElementById('swalEvtStartDate').value).toISOString();
-          var endDate = new Date(document.getElementById('swalEvtEndDate').value).toISOString();
+          var startDate = new Date(document.getElementById('swalEvtStartDate').value).getTime();
+          var endDate = new Date(document.getElementById('swalEvtEndDate').value).getTime();
           var allDay = document.getElementById('checkbox').checked;
 
           if (!eventTitle) {
@@ -101,9 +113,21 @@ document.addEventListener('DOMContentLoaded', function() {
 						<h2>Agenda de <b>Eventos</b></h2>
 					</div>
 					<div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Criar novo evento</span></a>
-						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Remover</span></a>
-					</div>
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                    @endauth
+                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
+                            <i class="material-icons">&#xE147;</i> <span>Criar novo evento</span>
+                        </a>
+                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">
+                            <i class="material-icons">&#xE15C;</i> <span>Remover</span>
+                        </a>
+                    </div>
                 </div>
             </div>
             <table class="table table-striped table-hover">
