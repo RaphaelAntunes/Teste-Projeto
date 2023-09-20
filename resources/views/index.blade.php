@@ -13,7 +13,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-  <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
@@ -22,64 +22,69 @@ document.addEventListener('DOMContentLoaded', function() {
     initialView: 'dayGridMonth',
     height: 650,
     events: 'fetchEvents.php',
-
+    businessHours: {
+      daysOfWeek: [1, 2, 3, 4, 5],
+    },
     dateClick: function(info) {
+
+      var selectedDayOfWeek = info.date.getDay();
+      if (calendar.getOption('businessHours').daysOfWeek.includes(selectedDayOfWeek)) {
         Swal.fire({
-        title: 'Adicionar Evento',
-        html:
+          title: 'Adicionar Evento',
+          html:
             '<div class="custom-swal-modal" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px">' +
             '<input id="swalEvtTitle" class="swal2-input custom-swal-input" style="width: 100%;" placeholder="Digite o título">' +
             '<input id="swalEvtDesc" class="swal2-input custom-swal-input" style="width: 100%; margin-top: 10px" placeholder="Digite a descrição"></input>' +
             '<label for="swalEvtStartDate" class="custom-swal-title" style="width: 100%">Data Inicial:</label>' +
-            '<input type="datetime-local" id="swalEvtStartDate" class="swal2-input style="width: 100%" custom-swal-input" value="' + info.dateStr.replace(/T.*$/, '') + 'T00:00">' +
+            '<input type="datetime-local" id="swalEvtStartDate" class="swal2-input" style="width: 100%" value="' + info.dateStr.replace(/T.*$/, '') + 'T00:00">' +
             '<label for="swalEvtEndDate" class="custom-swal-title">Data Final:</label>' +
-            '<input type="datetime-local" id="swalEvtEndDate" class="swal2-input custom-swal-input" value="' + info.dateStr.replace(/T.*$/, '') + 'T23:59">' +
+            '<input type="datetime-local" id="swalEvtEndDate" class="swal2-input" style="width: 100%" value="' + info.dateStr.replace(/T.*$/, '') + 'T23:59">' +
             '<label for="checkbox" style="width: 100%">Dia Inteiro</label>' +
             '<input type="checkbox" id="checkbox" class="swal2-checkbox">' +
             '</div>',
-        showCancelButton: true,
-        confirmButtonText: 'Adicionar',
-        cancelButtonText: 'Cancelar',
-        customClass: {
+          showCancelButton: true,
+          confirmButtonText: 'Adicionar',
+          cancelButtonText: 'Cancelar',
+          customClass: {
             popup: 'custom-swal-modal',
             title: 'custom-swal-title',
             confirmButton: 'custom-swal-confirm-button',
             cancelButton: 'custom-swal-cancel-button',
-        },
-        preConfirm: function() {
-          var eventTitle = document.getElementById('swalEvtTitle').value;
-          var eventDescription = document.getElementById('swalEvtDesc').value;
-          var startDate = new Date(document.getElementById('swalEvtStartDate').value).toISOString();
-          var endDate = new Date(document.getElementById('swalEvtEndDate').value).toISOString();
-          var allDay = document.getElementById('checkbox').checked;
+          },
+          preConfirm: function() {
+            var eventTitle = document.getElementById('swalEvtTitle').value;
+            var eventDescription = document.getElementById('swalEvtDesc').value;
+            var startDate = new Date(document.getElementById('swalEvtStartDate').value);
+            var endDate = new Date(document.getElementById('swalEvtEndDate').value);
+            var allDay = document.getElementById('checkbox').checked;
 
-          if (!eventTitle) {
-            Swal.showValidationMessage('O título do evento é obrigatório.');
-            return false;
+            if (!eventTitle) {
+              Swal.showValidationMessage('O título do evento é obrigatório.');
+              return false;
+            }
+
+            if (startDate > endDate) {
+              Swal.showValidationMessage('A data final não pode ser anterior à data inicial.');
+              return false;
+            }
+            calendar.addEvent({
+              title: eventTitle,
+              description: eventDescription,
+              start: startDate,
+              end: endDate,
+              allDay: allDay
+            });
+
+            return true;
           }
-
-          if (startDate > endDate) {
-            Swal.showValidationMessage('A data final não pode ser anterior à data inicial.');
-            return false;
+        }).then(function(result) {
+          if (result.isConfirmed) {
+            Swal.fire('Evento adicionado com sucesso!', '', 'success');
           }
-
-          return {
-            title: eventTitle,
-            description: eventDescription,
-            start: startDate,
-            end: endDate,
-            allDay: allDay
-          };
-        }
-      }).then(function(result) {
-        if (!result.isConfirmed) {
-          return;
-        }
-
-        calendar.addEvent(result.value);
-
-        Swal.fire('Evento adicionado com sucesso!', '', 'success');
-      });
+        });
+      } else {
+        alert('Esse dia não está disponível para agendamento.');
+      }
     }
   });
 
@@ -117,9 +122,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         </a>
                     </div>
 					<div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Criar novo evento</span></a>
-						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Remover</span></a>
-					</div>
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                    @endauth
+                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
+                            <i class="material-icons">&#xE147;</i> <span>Criar novo evento</span>
+                        </a>
+                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">
+                            <i class="material-icons">&#xE15C;</i> <span>Remover</span>
+                        </a>
+                    </div>
                 </div>
             </div>
             <table class="table table-striped table-hover">
