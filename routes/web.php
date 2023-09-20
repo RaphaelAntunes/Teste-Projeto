@@ -25,6 +25,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/editar-evento/{nomeEvento}', [EventoController::class, 'editarEvento']);
 });
 
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
+
 Route::get('/eventos', [EventoController::class, 'VisualizarEvento']);
 Route::get('/eventos/{id}', [EventoController::class, 'VisualizarEventoEsp']);
 

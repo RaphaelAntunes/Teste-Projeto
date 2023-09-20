@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,12 +26,23 @@
                     <div class="col-sm-6">
 						<h2>Agenda de <b>Eventos</b></h2>
 					</div>
-					<div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Criar novo evento</span></a>
-						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Remover</span></a>
-					</div>
+                    <div class="col-sm-6">
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-info">Login</a>
+                    @endauth
+                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
+                            <i class="material-icons">&#xE147;</i> <span>Criar novo evento</span>
+                        </a>
+                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">
+                            <i class="material-icons">&#xE15C;</i> <span>Remover</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -105,6 +116,7 @@
                     <input type="submit" class="btn btn-success" value="Adicionar">
                 </div>
             </form>
+
         </div>
     </div>
 </div>
