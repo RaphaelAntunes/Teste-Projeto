@@ -11,7 +11,13 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<script src="js/sweetalert2.all.min.js"></script>
+<link href="js/fullcalendar/lib/main.css" rel="stylesheet" />
+<script src="js/fullcalendar/lib/main.js"></script>
+<script defer src="../js/calendar.js"></script>
+
+
   <body>
     <div class="container">
         <div class="table-wrapper">
@@ -58,27 +64,29 @@
 
 
                 <tbody id="eventosTable">
-                    
-                    
+
+
                 </tbody>
 
             </table>
-			
+
         </div>
     </div>
+    <div class="container"  id='calendar'></div>
 	<!-- Edit Modal HTML -->
-<!-- Edit Modal HTML -->
-<div id="addEmployeeModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="addEventoForm"> <!-- Adicione um ID ao formulário -->
+    <!-- Edit Modal HTML -->
+    <div id="addEmployeeModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <h3>calendar</h3>
+                <form id="addEventoForm"> <!-- Adicione um ID ao formulário -->
                 @csrf <!-- Adicione o token CSRF para proteção contra ataques CSRF -->
 
-                <div class="modal-header">						
+                <div class="modal-header">
                     <h4 class="modal-title">Adicionar Evento</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div class="modal-body">					
+                <div class="modal-body">
                     <div class="form-group">
                         <label>Título</label>
                         <input type="text" name="titulo" class="form-control" required>
@@ -97,18 +105,18 @@
                     <div class="form-group">
                         <label>Data de Início</label>
                         <input type="date" name="data_inicio" class="form-control" required>
-                    </div>	
+                    </div>
                     <div class="form-group">
                         <label>Data de Encerramento</label>
                         <input type="date" name="data_prazo" class="form-control" required>
-                    </div>					
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
                     <input type="submit" class="btn btn-success" value="Adicionar">
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>
@@ -116,7 +124,7 @@
 
 <!-- Edit Modal HTML -->
 <div id="editEmployeeModal" class="modal fade">
-   
+
 </div>
 	<!-- Delete Modal HTML -->
 	<!-- Delete Modal HTML -->
@@ -126,11 +134,11 @@
             <form id="deleteEventoForm"> <!-- Adicione um ID ao formulário -->
                 @csrf <!-- Adicione o token CSRF para proteção contra ataques CSRF -->
 
-                <div class="modal-header">						
+                <div class="modal-header">
                     <h4 class="modal-title">Remover Evento</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div class="modal-body">					
+                <div class="modal-body">
                     <p>Tem certeza que deseja remover o evento da lista?</p>
                     <p class="text-warning"><small>Essa ação não poderá ser revertida.</small></p>
                 </div>
@@ -147,7 +155,7 @@
 </html>
 
 <script>
-    
+
     // Função que faz consumo e distribuição dos eventos
 
     $.ajax({
@@ -173,19 +181,19 @@
                 '</tr>';
                 tableBody.append(row);
             });
-            
+
         },
         error: function (error) {
             console.error('Erro na solicitação AJAX:', error);
         }
     });
-    
+
     function RemoveEvento(x){
-        var titulo = $(x).data('titulo'); 
+        var titulo = $(x).data('titulo');
         var url = 'excluir-evento/' + encodeURIComponent(titulo);
         if (confirm('Tem certeza que deseja excluir o evento "' + titulo + '"?')) {
 
-            
+
         $.ajax({
                     type: 'DELETE', // Use o método DELETE para solicitar exclusão
                     url: url,
@@ -220,11 +228,11 @@
                     <form id="editEventoForm"> <!-- Adicione um ID ao formulário -->
                         @csrf <!-- Adicione o token CSRF para proteção contra ataques CSRF -->
 
-                        <div class="modal-header">						
+                        <div class="modal-header">
                             <h4 class="modal-title">Editar Evento `+eventos.titulo+`</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
-                        <div class="modal-body">					
+                        <div class="modal-body">
                             <div class="form-group">
                                 <label>Título</label>
                                 <input type="text" name="titulo" value='`+eventos.titulo+`' class="form-control" required>
@@ -244,11 +252,11 @@
                             <div class="form-group">
                                 <label>Data de Início</label>
                                 <input type="date" value="`+dataInicioFormatada+`" name="data_inicio" class="form-control" required>
-                            </div>	
+                            </div>
                             <div class="form-group">
                                 <label>Data de Encerramento</label>
                                 <input type="date" name="data_prazo" value="`+dataPrazoFormatada+`" class="form-control" required>
-                            </div>					
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
@@ -267,7 +275,7 @@ editModal.innerHTML = '';
 
 // Adicione o formulário à div
 editModal.appendChild(pai);
-$('#editEventoForm').submit(function(e) {    
+$('#editEventoForm').submit(function(e) {
             e.preventDefault(); // Impede o envio padrão do formulário
 
             var formData = $(this).serialize(); // Serialize os dados do formulário
@@ -287,17 +295,17 @@ $('#editEventoForm').submit(function(e) {
                     console.error('Erro na solicitação AJAX:', error);
                 }
             });
-        });           
+        });
         },
         error: function (error) {
             console.error('Erro na solicitação AJAX:', error);
         }
     });
 
-        
+
     }
 
-    $('#addEventoForm').submit(function(e) {    
+    $('#addEventoForm').submit(function(e) {
             e.preventDefault(); // Impede o envio padrão do formulário
 
             var formData = $(this).serialize(); // Serialize os dados do formulário
@@ -318,7 +326,7 @@ $('#editEventoForm').submit(function(e) {
             });
         });
 
-        
+
         function formatarData(dataHoraStr) {
     var partes = dataHoraStr.split(' ')[0].split('-');
     if (partes.length === 3) {
@@ -369,7 +377,7 @@ $('#editEventoForm').submit(function(e) {
     border-radius: 3px;
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
-.table-title {        
+.table-title {
     padding-bottom: 15px;
     background: #435d7d;
     color: #fff;
@@ -425,7 +433,7 @@ table.table th i {
     font-size: 13px;
     margin: 0 5px;
     cursor: pointer;
-}	
+}
 table.table td:last-child i {
     opacity: 0.9;
     font-size: 22px;
@@ -473,11 +481,11 @@ table.table .avatar {
 }
 .pagination li a:hover {
     color: #666;
-}	
+}
 .pagination li.active a, .pagination li.active a.page-link {
     background: #03A9F4;
 }
-.pagination li.active a:hover {        
+.pagination li.active a:hover {
     background: #0397d6;
 }
 .pagination li.disabled i {
@@ -491,12 +499,12 @@ table.table .avatar {
     float: left;
     margin-top: 10px;
     font-size: 13px;
-}    
+}
 /* Custom checkbox */
 .custom-checkbox {
     position: relative;
 }
-.custom-checkbox input[type="checkbox"] {    
+.custom-checkbox input[type="checkbox"] {
     opacity: 0;
     position: absolute;
     margin: 5px 0 0 3px;
@@ -571,7 +579,7 @@ table.table .avatar {
 .modal .btn {
     border-radius: 2px;
     min-width: 100px;
-}	
+}
 .modal form label {
     font-weight: normal;
 }</style>
