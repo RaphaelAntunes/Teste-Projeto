@@ -69,18 +69,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: eventTitle,
                 description: eventDescription,
                 start: startDate,
-                end: endDate
+                end: endDate,
+                status: true
             };
 
             // Sending AJAX request
-            fetch('saveEvent.php', {
+            fetch("/criar-evento", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(eventData)
+
             })
-            .then(response => response.json())
+            .then(response => {
+                response.json()
+                console.log("Resposta do servidor:", response);
+                console.log("Resposta do servidor:", eventData);
+            })
             .then(data => {
                 if (data.success) {
                     calendar.addEvent(eventData);
@@ -136,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <i class="material-icons">&#xE15C;</i> <span>Remover</span>
                         </a>
                     </div>
-					<div class="col-sm-6">
+					<!-- <div class="col-sm-6">
                     @auth
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -151,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">
                             <i class="material-icons">&#xE15C;</i> <span>Remover</span>
                         </a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <table class="table table-striped table-hover">

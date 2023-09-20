@@ -69,12 +69,8 @@ class EventoController extends Controller
     // A data de início é única e não é um final de semana, você pode criar o novo evento
     $evento = EventoModel::create([
         'title' => $request->input('title'),
-<<<<<<< HEAD
-        'description' => $request->input('description'),
-=======
-        'descricao' => $request->input('descricao'),
->>>>>>> a17dd84b8d77c6130f6396d61019250f6191fb34
         'start' => $request->input('start'),
+        'description' => $request->input('description'),
         'end' => $request->input('end'),
         'status' => $request->input('status'),
         'usr_responsavel' => $usuarioEmail,
@@ -252,11 +248,7 @@ class EventoController extends Controller
         // Atualize os campos do evento com base nos dados fornecidos no request
         $evento->update([
             'title' => $request->input('title'),
-<<<<<<< HEAD
             'description' => $request->input('description'),
-=======
-            'descricao' => $request->input('descricao'),
->>>>>>> a17dd84b8d77c6130f6396d61019250f6191fb34
             'start' => $request->input('start'),
             'end' => $request->input('end'),
             'status' => $request->input('status'),
