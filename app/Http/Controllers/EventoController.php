@@ -67,10 +67,10 @@ class EventoController extends Controller
 
     // A data de início é única e não é um final de semana, você pode criar o novo evento
     $evento = EventoModel::create([
-        'titulo' => $request->input('titulo'),
-        'descricao' => $request->input('descricao'),
-        'data_inicio' => $request->input('data_inicio'),
-        'data_prazo' => $request->input('data_prazo'),
+        'title' => $request->input('title'),
+        'description' => $request->input('description'),
+        'start' => $request->input('start'),
+        'end' => $request->input('end'),
         'usr_responsavel' => $usuarioEmail,
     ]);
 
@@ -134,9 +134,9 @@ class EventoController extends Controller
         *       )
      * )
      */
-    public function VisualizarEventoEsp($titulo)
+    public function VisualizarEventoEsp($title)
     {
-        $evento = EventoModel::where('titulo', $titulo)
+        $evento = EventoModel::where('title', $title)
         ->first();
         if (!$evento) {
             return response()->json(['message' => 'Evento não encontrado ou você não tem permissão para vê-lo'], 404);
@@ -172,11 +172,11 @@ class EventoController extends Controller
      *      )
      * )
      */
-    public function excluirEvento($titulo)
+    public function excluirEvento($title)
     {
         // Busque o evento no banco de dados com base no título e usuário autenticado
         $usuarioEmail = Auth::user()->email;
-        $evento = EventoModel::where('titulo', $titulo)
+        $evento = EventoModel::where('title', $title)
             ->where('usr_responsavel', $usuarioEmail)
             ->first();
 
@@ -231,11 +231,11 @@ class EventoController extends Controller
         *      @OA\Response(response=404, description="Evento não encontrado ou você não tem permissão para editá-lo"),
         * )
         */
-    public function editarEvento(Request $request, $titulo)
+    public function editarEvento(Request $request, $title)
     {
         // Busque o evento no banco de dados com base no título e usuário autenticado
         $usuarioEmail = Auth::user()->email;
-        $evento = EventoModel::where('titulo', $titulo)
+        $evento = EventoModel::where('title', $title)
             ->where('usr_responsavel', $usuarioEmail)
             ->first();
 
@@ -245,10 +245,10 @@ class EventoController extends Controller
 
         // Atualize os campos do evento com base nos dados fornecidos no request
         $evento->update([
-            'titulo' => $request->input('titulo'),
-            'descricao' => $request->input('descricao'),
-            'data_inicio' => $request->input('data_inicio'),
-            'data_prazo' => $request->input('data_prazo'),
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'start' => $request->input('start'),
+            'end' => $request->input('end'),
             'status' => $request->input('status'),
         ]);
 

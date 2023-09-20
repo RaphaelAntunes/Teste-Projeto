@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Título</label>
-                        <input type="text" name="titulo" class="form-control" required>
+                        <input type="text" name="title" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Descrição</label>
@@ -263,14 +263,14 @@ document.addEventListener('DOMContentLoaded', function() {
             $.each(eventos, function(index, evento) {
                 var row = '<tr>' +
                     '<td><span class="custom-checkbox"><input type="checkbox" id="checkbox' + evento.id + '" name="options[]" value="' + evento.id + '"><label for="checkbox' + evento.id + '"></label></span></td>' +
-                    '<td>' + evento.titulo + '</td>' +
-                    '<td>' + evento.descricao + '</td>' +
+                    '<td>' + evento.title + '</td>' +
+                    '<td>' + evento.description + '</td>' +
                     '<td>' + evento.status + '</td>' +
-                    '<td>' + evento.data_inicio + '</td>' +
-                    '<td>' + evento.data_prazo + '</td>' +
+                    '<td>' + evento.start + '</td>' +
+                    '<td>' + evento.end + '</td>' +
                     '<td>' +
-                        '<a href="#editEmployeeModal" class="edit" onclick="EditarEvento(this)" data-titulo="' + evento.titulo + '"  data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
-                        '<a href="#deleteEmployeeModal" class="delete" onclick="RemoveEvento(this)" data-titulo="' + evento.titulo + '" ><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>'
+                        '<a href="#editEmployeeModal" class="edit" onclick="EditarEvento(this)" data-title="' + evento.title + '"  data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
+                        '<a href="#deleteEmployeeModal" class="delete" onclick="RemoveEvento(this)" data-title="' + evento.title + '" ><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>'
 
                     '</td>' +
                 '</tr>';
@@ -284,9 +284,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function RemoveEvento(x){
-        var titulo = $(x).data('titulo');
-        var url = 'excluir-evento/' + encodeURIComponent(titulo);
-        if (confirm('Tem certeza que deseja excluir o evento "' + titulo + '"?')) {
+        var title = $(x).data('title');
+        var url = 'excluir-evento/' + encodeURIComponent(title);
+        if (confirm('Tem certeza que deseja excluir o evento "' + title + '"?')) {
 
 
         $.ajax({
@@ -305,8 +305,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function EditarEvento(x){
-        var titulo = $(x).data('titulo'); // Obtém o título do atributo de dados
-        var url = 'eventos/' + encodeURIComponent(titulo);
+        var title = $(x).data('title'); // Obtém o título do atributo de dados
+        var url = 'eventos/' + encodeURIComponent(title);
 
         $.ajax({
         type: 'GET',
@@ -314,8 +314,8 @@ document.addEventListener('DOMContentLoaded', function() {
         success: function (data) {
             console.log(data);
             var eventos = data.eventos;
-            var dataInicioFormatada = formatarData(eventos.data_inicio);
-            var dataPrazoFormatada = formatarData(eventos.data_prazo);
+            var dataInicioFormatada = formatarData(eventos.start);
+            var dataPrazoFormatada = formatarData(eventos.end);
 
             var pai = document.createElement('div');
             pai.innerHTML = `<div class="modal-dialog">

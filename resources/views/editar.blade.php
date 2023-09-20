@@ -7,17 +7,17 @@
     <div class="container">
         <!-- Formulário para editar evento -->
         <h1>Editar Evento</h1>
-        <form action="/eventos/{{ $evento->titulo }}" method="POST">
+        <form action="/eventos/{{ $evento->title }}" method="POST">
             @csrf
             @method('PUT')
-            <label for="titulo">Título</label>
-            <input type="text" name="titulo" value="{{ $evento->titulo }}" required>
-            <label for="descricao">Descrição</label>
-            <textarea name="descricao" required>{{ $evento->descricao }}</textarea>
-            <label for="data_inicio">Data de Início</label>
-            <input type="date" name="data_inicio" value="{{ $evento->data_inicio }}" required>
-            <label for="data_prazo">Data de Encerramento</label>
-            <input type="date" name="data_prazo" value="{{ $evento->data_prazo }}" required>
+            <label for="title">Título</label>
+            <input type="text" name="title" value="{{ $evento->title }}" required>
+            <label for="description">Descrição</label>
+            <textarea name="description" required> {{ $evento->description }}</textarea>
+            <label for="start">Data de Início</label>
+            <input type="date" name="start" value="{{ $evento->start }}" required>
+            <label for="end">Data de Encerramento</label>
+            <input type="date" name="end" value="{{ $evento->end }}" required>
             <button type="submit">Salvar</button>
         </form>
     </div>
