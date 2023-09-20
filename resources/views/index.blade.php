@@ -12,19 +12,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-<link href="js/fullcalendar/lib/main.css" rel="stylesheet" >
+<script src="js/sweetalert2.all.min.js"></script>
+<link href="js/fullcalendar/lib/main.css" rel="stylesheet" />
 <script src="js/fullcalendar/lib/main.js"></script>
-<script>
-
-      document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth'
-        });
-        calendar.render();
-      });
-
-    </script>
+<script defer src="../js/calendar.js"></script>
 
 
   <body>
@@ -70,7 +61,7 @@
 
         </div>
     </div>
-    <div id='calendar'></div>
+    <div class="container"  id='calendar'></div>
 	<!-- Edit Modal HTML -->
     <!-- Edit Modal HTML -->
     <div id="addEmployeeModal" class="modal fade">
