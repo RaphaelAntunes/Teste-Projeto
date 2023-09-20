@@ -27,7 +27,7 @@
                             <button type="submit" class="btn btn-primary">Logout</button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                        <a href="{{ route('login') }}" class="btn btn-info">Login</a>
                     @endauth
                         <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
                             <i class="material-icons">&#xE147;</i> <span>Criar novo evento</span>
