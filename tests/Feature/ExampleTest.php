@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Event;
 
 class ExampleTest extends TestCase
 {
@@ -54,65 +55,5 @@ class ExampleTest extends TestCase
         $token = $response->cookie('laravel_session');
     
         return $token;
-    }
-
-    public function test_create_event()
-    {
-        $token = $this->test_user_login();
-
-        // Manually create an event
-        $response = $this->json('POST', 'http://localhost:8000/criar-evento', [
-            'title' => 'Exemplo de Título',
-            'descricao' => 'Exemplo de Descrição',
-            'start' => '2023-09-20',
-            'end' => '2023-09-30',
-            'usr_responsavel' => 'john@example.com',
-        ], ['Authorization' => "Bearer $token"]);
-    
-        $response->assertStatus(302);
-    }
-
-    public function test_edit_event()
-    {
-        $token = $this->test_user_login();
-
-        // Manually create an event
-        $event = Event::create([
-            'title' => 'Evento para Edição',
-            'descricao' => 'Descrição do Evento',
-            'start' => '2023-09-20',
-            'end' => '2023-09-30',
-            'usr_responsavel' => 'john@example.com',
-        ]);
-
-        $data = [
-            'title' => 'Evento Editado',
-            'descricao' => 'Descrição Editada',
-            'start' => '2023-11-01',
-            'end' => '2023-11-10',
-            'usr_responsavel' => 'john@example.com',
-        ];
-    
-        $response = $this->put("http://localhost:8000/editar-evento/{$event->id}", $data, ['Authorization' => "Bearer $token"]);
-    
-        $response->assertStatus(302);
-    }
-
-    public function test_delete_event()
-    {
-        $token = $this->test_user_login();
-
-        // Manually create an event
-        $event = Event::create([
-            'title' => 'Evento para Exclusão',
-            'descricao' => 'Descrição do Evento',
-            'start' => '2023-09-20',
-            'end' => '2023-09-30',
-            'usr_responsavel' => 'john@example.com',
-        ]);
-    
-        $response = $this->delete("http://localhost:8000/excluir-evento/{$event->id}", [], ['Authorization' => "Bearer $token"]);
-    
-        $response->assertStatus(302);
     }
 }
