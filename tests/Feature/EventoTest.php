@@ -59,7 +59,6 @@ class EventoTest extends TestCase
     {
         $token = $this->test_user_login();
 
-        // Create an event
         $event = EventoModel::create([
             'title' => 'Evento para Edição',
             'description' => 'Descrição do Evento',
