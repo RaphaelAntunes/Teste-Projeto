@@ -18,9 +18,7 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 
-    <script>
-       
-    </script>
+    <script></script>
 
     <script src="js/sweetalert2.all.min.js"></script>
     <link href="js/fullcalendar/lib/main.css" rel="stylesheet" />
@@ -39,7 +37,7 @@
                         @auth
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="btn btn-primary">Logout</button>
+                                <button type="submit" class="btn btn-primary">Sair</button>
                             </form>
                         @else
                             <a href="{{ route('login') }}" class="btn btn-info">Login</a>
@@ -47,16 +45,14 @@
                         <a onclick="NewEvento()" class="btn btn-success" data-toggle="modal">
                             <i class="material-icons">&#xE147;</i> <span>Criar novo evento</span>
                         </a>
-                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">
-                            <i class="material-icons">&#xE15C;</i> <span>Remover</span>
-                        </a>
+                        
                     </div>
                     <!-- <div class="col-sm-6">
                     @auth
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-primary">Logout</button>
-                            </form>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary">Logout</button>
+                                </form>
 @else
     <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
                     @endauth
@@ -72,12 +68,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>
-                            <span class="custom-checkbox">
-                                <input type="checkbox" id="selectAll">
-                                <label for="selectAll"></label>
-                            </span>
-                        </th>
+                    
                         <th>Titulo</th>
                         <th>Sobre</th>
                         <th>Status</th>
@@ -101,14 +92,23 @@
         </div>
     </div>
     <div class="container" id='calendar'></div>
-    
+
 </body>
 
 </html>
 
 <script>
     // Função que faz consumo e distribuição dos eventos
-
+    function formatarDT(dataStr) {
+    const data = new Date(dataStr);
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0'); // Lembre-se de que os meses são base 0 em JavaScript
+    const ano = data.getFullYear();
+    const horas = String(data.getHours()).padStart(2, '0');
+    const minutos = String(data.getMinutes()).padStart(2, '0');
+    
+    return `${dia}/${mes}/${ano} ${horas}:${minutos}`;
+}
     $.ajax({
         type: 'GET',
         url: '/eventos',
@@ -118,14 +118,11 @@
             var tableBody = $('#eventosTable');
             $.each(eventos, function(index, evento) {
                 var row = '<tr>' +
-                    '<td><span class="custom-checkbox"><input type="checkbox" id="checkbox' + evento
-                    .id + '" name="options[]" value="' + evento.id + '"><label for="checkbox' +
-                    evento.id + '"></label></span></td>' +
                     '<td>' + evento.title + '</td>' +
                     '<td>' + evento.description + '</td>' +
                     '<td>' + evento.status + '</td>' +
-                    '<td>' + evento.start + '</td>' +
-                    '<td>' + evento.end + '</td>' +
+                    '<td>' + formatarDT(evento.start) + '</td>' +
+                    '<td>' + formatarDT(evento.end) + '</td>' +
                     '<td>' + evento.usr_responsavel + '</td>' +
 
                     '<td>' +
@@ -410,7 +407,7 @@
 
         if (confirm('Tem certeza que deseja excluir o evento "' + title + '"?')) {
             var url = '/excluir-evento/' +
-            title; // Substitua pelo URL correto da sua rota de exclusão de evento
+                title; // Substitua pelo URL correto da sua rota de exclusão de evento
 
             $.ajax({
                 type: 'DELETE', // Use o método DELETE para solicitar exclusão
@@ -427,9 +424,3 @@
         }
     });
 </script>
-
-
-
-
-
-
