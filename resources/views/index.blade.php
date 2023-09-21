@@ -16,12 +16,14 @@
 <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    
   var calendarEl = document.getElementById('calendar');
-
+  
   var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     height: 650,
     events: 'fetchEvents.php',
+
     businessHours: {
       daysOfWeek: [1, 2, 3, 4, 5],
     },
@@ -49,6 +51,10 @@ document.addEventListener('DOMContentLoaded', function() {
             confirmButton: 'custom-swal-confirm-button',
             cancelButton: 'custom-swal-cancel-button',
           },
+      
+
+    
+
           preConfirm: function() {
             var eventTitle = document.getElementById('swalEvtTitle').value;
             var eventDescription = document.getElementById('swalEvtDesc').value;
@@ -98,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (response.status = 201) {
                     calendar.addEvent(eventData);
                     Swal.fire('Evento adicionado com sucesso!', '', 'success');
+                    location.reload();
                 } else {
                     Swal.fire('Erro ao adicionar evento', data.message, 'error');
                 }
@@ -170,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     @else
                         <a href="{{ route('login') }}" class="btn btn-info">Login</a>
                     @endauth
-                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
+                        <a onclick="opennewevent()" class="btn btn-success" data-toggle="modal">
                             <i class="material-icons">&#xE147;</i> <span>Criar novo evento</span>
                         </a>
                         <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">
@@ -210,6 +217,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <th>Data de Início</th>
                         <th>Data de Encerramento</th>
                         <th>Responsável</th>
+                        <th>Ações</th>
+
 
                     </tr>
                 </thead>
@@ -227,50 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="container"  id='calendar'></div>
 	<!-- Edit Modal HTML -->
     <!-- Edit Modal HTML -->
-    <div id="addEmployeeModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <h3>calendar</h3>
-                <form id="addEventoForm"> <!-- Adicione um ID ao formulário -->
-                @csrf <!-- Adicione o token CSRF para proteção contra ataques CSRF -->
 
-                <div class="modal-header">
-                    <h4 class="modal-title">Adicionar Evento</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Título</label>
-                        <input type="text" name="title" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Descrição</label>
-                        <input type="text" name="descricao" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select name="status" class="form-control">
-                            <option value="Aberto">Aberto</option>
-                            <option value="Concluido">Concluído</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Data de Início</label>
-                        <input type="date" name="data_inicio" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Data de Encerramento</label>
-                        <input type="date" name="data_prazo" class="form-control" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                    <input type="submit" class="btn btn-success" value="Adicionar">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 <!-- Edit Modal HTML -->
 
 <!-- Edit Modal HTML -->
@@ -324,6 +290,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     '<td>' + evento.status + '</td>' +
                     '<td>' + evento.start + '</td>' +
                     '<td>' + evento.end + '</td>' +
+                    '<td>' + evento.usr_responsavel + '</td>' +
+
                     '<td>' +
                         '<a href="#editEmployeeModal" class="edit" onclick="EditarEvento(this)" data-title="' + evento.title + '"  data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
                         '<a href="#deleteEmployeeModal" class="delete" onclick="RemoveEvento(this)" data-title="' + evento.title + '" ><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>'
@@ -339,26 +307,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function RemoveEvento(x){
-        var title = $(x).data('title');
-        var url = 'excluir-evento/' + encodeURIComponent(title);
-        if (confirm('Tem certeza que deseja excluir o evento "' + title + '"?')) {
+    function RemoveEvento(x) {
+    var title = $(x).data('title');
+    var url = 'excluir-evento/' + encodeURIComponent(title);
 
+    Swal.fire({
+        title: 'Remover Evento',
+        html: '<p>Tem certeza que deseja remover o evento? Essa ação não poderá ser desfeita.</p>',
+        showCancelButton: true,
+        confirmButtonText: 'Remover',
+        cancelButtonText: 'Cancelar',
+    }).then(function (result) {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'DELETE',
+                url: url,
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Evento removido com sucesso',
+                        icon: 'success',
+                    }).then(function () {
+                        location.reload(); // Recarrega a página após clicar em "OK"
+                    });
+                },
+                error: function (error) {
+                    console.error('Erro na solicitação AJAX:', error);
+                    Swal.fire({
+                        title: 'Erro ao remover evento',
+                        text: 'Houve um erro ao remover o evento.',
+                        icon: 'error',
+                    });
+                }
+            });
+        }
+    });
+}
 
-        $.ajax({
-                    type: 'DELETE', // Use o método DELETE para solicitar exclusão
-                    url: url,
-                    success: function (response) {
-                        // Manipule a resposta da API, se necessário
-                        console.log(response);
-                        // Recarregue a página ou atualize a lista de eventos, se necessário
-                    },
-                    error: function (error) {
-                        console.error('Erro na solicitação AJAX:', error);
-                    }
-                });
-            }
-    }
 
     function EditarEvento(x){
         var title = $(x).data('title'); // Obtém o título do atributo de dados
@@ -513,6 +497,9 @@ $('#editEventoForm').submit(function(e) {
             }
         });
 </script>
+
+
+
 
 
 <style>  body {
