@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
             // Sending AJAX request
+            calendar.render();
             fetch("/criar-evento", {
                 method: 'POST',
                 headers: {
@@ -97,12 +98,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             })
             .then(response => {
-                
+
                 console.log("Resposta do servidor:", response);
                 console.log("Resposta do servidor:", eventData);
                 console.log("par:", response);
                 if (response.status = 201) {
                     calendar.addEvent(eventData);
+                    calendar.renderEvents([eventData]);
+                    calendar.render();
                     Swal.fire('Evento adicionado com sucesso!', '', 'success');
                     location.reload();
                 } else {
@@ -110,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
             })
-           
+
             return false;
         }
         }).then(function(result) {
