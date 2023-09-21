@@ -63,7 +63,7 @@ class ExampleTest extends TestCase
         // Manually create an event
         $response = $this->json('POST', 'http://localhost:8000/criar-evento', [
             'title' => 'Exemplo de Título',
-            'description' => 'Exemplo de Descrição',
+            'descricao' => 'Exemplo de Descrição',
             'start' => '2023-09-20',
             'end' => '2023-09-30',
             'usr_responsavel' => 'john@example.com',
@@ -72,29 +72,14 @@ class ExampleTest extends TestCase
         $response->assertStatus(302);
     }
 
-<<<<<<< HEAD
     public function test_edit_event()
-=======
-        public function test_get_event()
-    {
-        $event = factory()->create(); // Suponha que você tenha um evento criado
-
-        $response = $this->get("http://localhost:8000/visualizar-evento/{$event->id}");
-
-        $response->assertStatus(200) // Deve retornar código 200 (OK)
-            ->assertSee($event->title) // Verifica se o título do evento está presente na resposta
-            ->assertSee($event->description); // Verifica se a descrição do evento está presente na resposta
-    }
-
-        public function test_edit_event()
->>>>>>> 38aef28765817a91db042096e268f529579469b1
     {
         $token = $this->test_user_login();
 
         // Manually create an event
         $event = Event::create([
             'title' => 'Evento para Edição',
-            'description' => 'Descrição do Evento',
+            'descricao' => 'Descrição do Evento',
             'start' => '2023-09-20',
             'end' => '2023-09-30',
             'usr_responsavel' => 'john@example.com',
@@ -102,7 +87,7 @@ class ExampleTest extends TestCase
 
         $data = [
             'title' => 'Evento Editado',
-            'description' => 'Descrição Editada',
+            'descricao' => 'Descrição Editada',
             'start' => '2023-11-01',
             'end' => '2023-11-10',
             'usr_responsavel' => 'john@example.com',
@@ -120,7 +105,7 @@ class ExampleTest extends TestCase
         // Manually create an event
         $event = Event::create([
             'title' => 'Evento para Exclusão',
-            'description' => 'Descrição do Evento',
+            'descricao' => 'Descrição do Evento',
             'start' => '2023-09-20',
             'end' => '2023-09-30',
             'usr_responsavel' => 'john@example.com',
