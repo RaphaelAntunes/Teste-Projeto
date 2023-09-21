@@ -79,6 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 end: formattedEndDate
             };
 
+
+
             // Sending AJAX request
             calendar.render();
             fetch("/criar-evento", {
@@ -90,13 +92,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             })
             .then(response => {
-                response.json()
-                calendar.render();
+
                 console.log("Resposta do servidor:", response);
                 console.log("Resposta do servidor:", eventData);
-            })
-            .then(data => {
-                if (data.success) {
+                console.log("par:", response);
+                if (response.status = 201) {
                     calendar.addEvent(eventData);
                     calendar.renderEvents([eventData]);
                     calendar.render();
@@ -104,33 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     Swal.fire('Erro ao adicionar evento', data.message, 'error');
                 }
-            });
 
-            fetch("/eventos", {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
             })
-            .then(response => {
-                if (response.ok) {
-                    console.log(response)
-                    return response.json();
-                } else {
-                    throw new Error('Erro ao obter a lista de eventos');
-                    console.log("erro")
-                }
-            })
-            .then(data => {
-
-                console.log("Lista de eventos:", data);
-                data.forEach(evento => {
-                    console.log("Evento:", evento);
-                });
-            })
-            .catch(error => {
-                console.error("Erro na solicitação GET:", error);
-            });
 
             return false;
         }
@@ -144,6 +119,33 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   });
+
+  $.ajax({
+                type: 'GET',
+                url: '/eventos',
+                success: function (data) {
+                    console.log(data);
+                    var eventos = data.eventos;
+                    var tableBody = $('#eventosTable');
+                    $.each(eventos, function(index, evento) {
+
+                        var eventDataGET = {
+                            title: evento.title,
+                            description: evento.description,
+                            status: 'Aberto',
+                            start: evento.start,
+                            end: evento.end};
+                            calendar.addEvent(eventDataGET);
+
+                            console.log(eventDataGET);
+
+                    });
+
+        },
+        error: function (error) {
+            console.error('Erro na solicitação AJAX:', error);
+        }
+    });
 
   calendar.render();
 });
