@@ -72,7 +72,22 @@ class ExampleTest extends TestCase
         $response->assertStatus(302);
     }
 
+<<<<<<< HEAD
     public function test_edit_event()
+=======
+        public function test_get_event()
+    {
+        $event = factory()->create(); // Suponha que você tenha um evento criado
+
+        $response = $this->get("http://localhost:8000/visualizar-evento/{$event->id}");
+
+        $response->assertStatus(200) // Deve retornar código 200 (OK)
+            ->assertSee($event->title) // Verifica se o título do evento está presente na resposta
+            ->assertSee($event->description); // Verifica se a descrição do evento está presente na resposta
+    }
+
+        public function test_edit_event()
+>>>>>>> 38aef28765817a91db042096e268f529579469b1
     {
         $token = $this->test_user_login();
 
