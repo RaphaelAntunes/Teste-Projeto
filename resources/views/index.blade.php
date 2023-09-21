@@ -79,6 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 end: formattedEndDate
             };
 
+
+
             // Sending AJAX request
             fetch("/criar-evento", {
                 method: 'POST',
@@ -89,19 +91,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
             })
             .then(response => {
-                response.json()
+                
                 console.log("Resposta do servidor:", response);
                 console.log("Resposta do servidor:", eventData);
-            })
-            .then(data => {
-                if (data.success) {
+                console.log("par:", response);
+                if (response.status = 201) {
                     calendar.addEvent(eventData);
                     Swal.fire('Evento adicionado com sucesso!', '', 'success');
                 } else {
                     Swal.fire('Erro ao adicionar evento', data.message, 'error');
                 }
-            });
 
+            })
+           
             return false;
         }
         }).then(function(result) {
@@ -114,6 +116,33 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   });
+
+  $.ajax({
+                type: 'GET',
+                url: '/eventos',
+                success: function (data) {
+                    console.log(data);
+                    var eventos = data.eventos;
+                    var tableBody = $('#eventosTable');
+                    $.each(eventos, function(index, evento) {
+
+                        var eventDataGET = {
+                            title: evento.title,
+                            description: evento.description,
+                            status: 'Aberto',
+                            start: evento.start,
+                            end: evento.end};
+                            calendar.addEvent(eventDataGET);
+
+                            console.log(eventDataGET);
+
+                    });
+
+        },
+        error: function (error) {
+            console.error('Erro na solicitação AJAX:', error);
+        }
+    });
 
   calendar.render();
 });
