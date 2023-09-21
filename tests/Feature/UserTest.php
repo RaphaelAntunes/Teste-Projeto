@@ -48,10 +48,8 @@ class UserTest extends TestCase
     
         $response->assertStatus(302);
     
-        // Check for the 'laravel_session' cookie
         $response->assertCookie('laravel_session');
     
-        // Extract the cookie value (token)
         $token = $response->cookie('laravel_session');
     
         return $token;
